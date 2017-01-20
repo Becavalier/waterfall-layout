@@ -1,0 +1,47 @@
+body, html {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+}
+
+#container {
+	display: flex;
+	justify-content: space-around;
+    flex: 1;
+}
+
+.card {
+	height: 400px;
+	width: 280px;
+	margin: 10px;
+	background-color: grey;
+}
+
+.col {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.m {
+	height: 320px;
+}
+
+.mx {
+	height: 380px;
+}
+
+.mxx {
+	height: 460px;
+}
+
+.l {
+	height: 520px;
+}
+
+.lx {
+	height: 580px;
+}
+
+.lxx {
+	height: 660px;
+}
