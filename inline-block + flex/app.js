@@ -1,19 +1,20 @@
 ;(function(){
 
+	// Initial containers
 	let waterfallCols  = [],
 		waterfallCards = [];
 
-	function init(mockData = ["x", "sx", "sxx", "m", "mx", "mxx", "l", "lx", "lxx"]) {
+	function init(importData = ["l", "lx", "lxx", "l", "lx", "lxx", "l", "lx", "lxx"]) {
 
 		// Clear
 		document.getElementById("container").innerHTML = "";
 
-		// Save initial cards instance
-		waterfallCards = mockData;
+		// Save initial card instances
+		waterfallCards = importData;
 		waterfallCols  = [];
 
 		let cardScale = {
-			width: 280
+			width: 200
 		};
 
 		// Get client window scale
@@ -26,8 +27,13 @@
 
 		// Create columns
 		let docFragment = document.createDocumentFragment();
+
 		for (let i = 0; i < colsNum; i ++) {
+
+			// Append col containers
 			let colEntity = document.createElement("div");
+			colEntity.className = "col";
+			docFragment.appendChild(colEntity);
 
 			// Col collection
 			waterfallCols[i] = {
@@ -35,82 +41,87 @@
 				height: 0
 			}
 
-			colEntity.className = "col";
-			docFragment.appendChild(colEntity);
 		}
 
 		// Append to body
 		document.getElementById("container").appendChild(docFragment);
 
-		// Paint
-		reload(mockData);
+		// Paint cards
+		reload(importData);
 	}
 
 	function reload(dataset) {
 
 		for (let i = 0; i < dataset.length; i ++) {
-
+			// Create card element
 			let div = document.createElement("div");
 			div.className = "card " + dataset[i];
 
-			let col = chooseBestCol(waterfallCols);
+			// Choose a shortest col to append to
+			let col = chooseCol(waterfallCols);
 
+			// Append card to this col
 			col.ele.appendChild(div);
 
-			update(col.ele, waterfallCols);
+			// Update col status (height)
+			update(div, col.ele, waterfallCols);
 		}
 
 	}
 
-	function update(col, waterfallCols) {
-		let height = 0;
-		for (let card of col.children) {
-			height = height + parseInt(window.getComputedStyle(card).height.slice(0, -2));
-		}
+	function update(ele, col, waterfallCols) {
 
 		for (let item in waterfallCols) {
+
 			if(waterfallCols[item].ele === col) {
-				waterfallCols[item].height = height;
+				waterfallCols[item].height = waterfallCols[item].height + parseInt(window.getComputedStyle(ele).height.slice(0, -2));
 				break;
 			}
+
 		}
+
 	}
 
-	function chooseBestCol(waterfallCols) {
+	function chooseCol(waterfallCols) {
+
 		let result = {
 			height: Number.MAX_VALUE
 		};
+
 		for (let item in waterfallCols) {
+
 			if(waterfallCols[item].height < result.height) {
 				result = waterfallCols[item];
 			}
 		}
 
+
 		return result;
 	}
 
-	init();
-
 	window.addEventListener("scroll", function() {
-		if(window.scrollY >= 2 * parseInt(window.getComputedStyle(document.documentElement).height.slice(0, -2)) / 3) {
 
-			// Get new dataset from ajax call
-			let random = ["s", "sx", "sxx", "m", "mx", "mxx", "l", "lx", "lxx"];
-			let ajaxCon = [];
+		if(window.scrollY >= parseInt(window.getComputedStyle(document.documentElement).height.slice(0, -2)) / 2) {
+
+			// Get new dataset from ajax calls
+			let ajaxContent = [];
 			for (let i = 0; i < 8; i ++) {
-				ajaxCon[i] = random[Math.round(Math.random() * 8)];
+				ajaxContent[i] = ["s", "sx", "sxx", "m", "mx", "mxx", "l", "lx", "lxx"][Math.round(Math.random() * 8)];
 			}
 
 			// Save instances
-			waterfallCards = waterfallCards.concat(ajaxCon);
+			waterfallCards = waterfallCards.concat(ajaxContent);
 
-			reload.call(this, ajaxCon);
+			reload.call(this, ajaxContent);
 		}
+
 	});
 
 	window.addEventListener("resize", function() {
 		init(waterfallCards);
 	});
+
+	init();
 
 })();
 
