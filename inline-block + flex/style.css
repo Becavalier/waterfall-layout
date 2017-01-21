@@ -22,26 +22,38 @@ body, html {
 	vertical-align: top;
 }
 
-.m {
-	height: 320px;
+.s {
+	height: 50px;
 }
 
-.mx {
+.sx {
+	height: 150px;
+}
+
+.sxx {
+	height: 260px;
+}
+
+.m {
 	height: 380px;
 }
 
+.mx {
+	height: 490px;
+}
+
 .mxx {
-	height: 460px;
+	height: 600px;
 }
 
 .l {
-	height: 520px;
+	height: 720px;
 }
 
 .lx {
-	height: 580px;
+	height: 780px;
 }
 
 .lxx {
-	height: 660px;
+	height: 860px;
 }
