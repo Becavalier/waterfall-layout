@@ -21,84 +21,57 @@
 		let windowWidth = document.documentElement.clientWidth;
 		let colsNum = Math.floor(windowWidth / (cardScale.width + 20));
 
-		if(waterfallCols.length === colsNum) {
-			return;
+		// if(waterfallCols.length === colsNum) {
+		// 	return;
+		// }
+
+		waterfallCols = [];
+
+		let gapWidth = Math.floor((windowWidth - colsNum * cardScale.width - 100) / (colsNum - 1));
+
+		for (let i = 0; i < colsNum; i ++) {
+			waterfallCols[i] = {
+				posx: (50 + i * (gapWidth + cardScale.width)),
+				posy: 0
+			};
 		}
 
 		// Clear
 		document.getElementById("container").innerHTML = "";
 
-		// Save initial card instances
+		// Save initial card instances and painting cards
 		waterfallCards = importData;
-		waterfallCols  = [];
 
-		// Create columns
-		let docFragment = document.createDocumentFragment();
-
-		for (let i = 0; i < colsNum; i ++) {
-
-			// Append col containers
-			let colEntity = document.createElement("div");
-			colEntity.className = "col";
-			docFragment.appendChild(colEntity);
-
-			// Col collection
-			waterfallCols[i] = {
-				ele: colEntity,
-				height: 0
-			}
-
-		}
-
-		// Append to body
-		document.getElementById("container").appendChild(docFragment);
-
-		// Paint cards
-		reload(importData);
+		reload(waterfallCards);
 	}
 
 	function reload(dataset) {
 
 		for (let i = 0; i < dataset.length; i ++) {
-			// Create card element
-			let div = document.createElement("div");
-			div.className = "card " + dataset[i];
 
-			// Choose a shortest col to append to
 			let col = chooseCol(waterfallCols);
 
-			// Append card to this col
-			col.ele.appendChild(div);
+			let div = document.createElement("div");
+			div.className  = "card " + dataset[i];
+			div.style.left = col.posx + "px";
+			div.style.top  = col.posy + 10 + "px";
 
-			// Update col status (height)
-			update(div, col.ele, waterfallCols);
-		}
+			document.getElementById("container").appendChild(div);
 
-	}
-
-	function update(ele, col, waterfallCols) {
-
-		for (let item in waterfallCols) {
-
-			if(waterfallCols[item].ele === col) {
-				waterfallCols[item].height = waterfallCols[item].height + parseInt(window.getComputedStyle(ele).height.slice(0, -2));
-				break;
-			}
-
+			col.posy = col.posy + 10 + parseInt(window.getComputedStyle(div).height.slice(0, -2));
 		}
 
 	}
 
 	function chooseCol(waterfallCols) {
 
-		let result = {
-			height: Number.MAX_VALUE
-		};
+		let temp   = Number.MAX_VALUE;
+		let result = null;
 
-		for (let item in waterfallCols) {
-
-			if(waterfallCols[item].height < result.height) {
-				result = waterfallCols[item];
+		for (let item of waterfallCols) {
+			if(item.posy < temp) {
+				temp = item.posy;
+				result = item;
 			}
 		}
 

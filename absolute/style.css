@@ -1,0 +1,52 @@
+body, html {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+}
+
+#container {
+	position: relative;
+}
+
+.card {
+	height: 400px;
+	width: 200px;
+	position: absolute;
+	background-color: grey;
+}
+
+.s {
+	height: 50px;
+}
+
+.sx {
+	height: 150px;
+}
+
+.sxx {
+	height: 260px;
+}
+
+.m {
+	height: 380px;
+}
+
+.mx {
+	height: 490px;
+}
+
+.mxx {
+	height: 600px;
+}
+
+.l {
+	height: 720px;
+}
+
+.lx {
+	height: 780px;
+}
+
+.lxx {
+	height: 860px;
+}
